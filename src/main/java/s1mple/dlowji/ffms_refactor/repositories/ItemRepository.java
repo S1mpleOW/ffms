@@ -22,13 +22,15 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
 	@Override
 	@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-	default <S extends Item> S save(S entity) {
-		return null;
-	}
+	 Item save(Item entity);
 
 	@Override
 	@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
 	default void deleteById(Long aLong) {
 
 	}
+
+	public boolean existsByNameIgnoreCase(String name);
+
+	public Item findByNameIgnoreCase(String name);
 }

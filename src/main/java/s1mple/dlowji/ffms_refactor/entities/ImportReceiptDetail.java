@@ -1,8 +1,10 @@
 package s1mple.dlowji.ffms_refactor.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
 @Entity
@@ -27,8 +29,9 @@ public class ImportReceiptDetail {
 	private Item item;
 
 	@Column(name = "DELIVERY_DATE")
-	private ZonedDateTime deliveryDate;
+	private LocalDateTime deliveryDate;
 
+	@CreationTimestamp
 	@Column(name = "ORDER_DATE")
 	private ZonedDateTime orderDate;
 
