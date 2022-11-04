@@ -10,4 +10,6 @@ public interface IRoleService {
 	Optional<Role> findByName(String name);
 
 	Optional<Role> findByName(RoleName name);
+
+	Role save(Role role);
 }

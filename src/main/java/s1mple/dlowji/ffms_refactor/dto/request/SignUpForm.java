@@ -3,6 +3,7 @@ package s1mple.dlowji.ffms_refactor.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import s1mple.dlowji.ffms_refactor.entities.enums.SexType;
 
 import javax.persistence.EnumType;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Builder
+@ToString
 public class SignUpForm {
 	@NotNull(message = "Please enter full name")
 	@NotEmpty(message = "Please enter full name")
@@ -52,6 +54,7 @@ public class SignUpForm {
 
 	@NotNull(message = "Please enter password")
 	@NotEmpty(message = "Please enter password")
+	@Length(min = 6, max = 32)
 	private String password;
 
 	private String description;

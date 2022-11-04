@@ -25,7 +25,4 @@ public class Supplier extends AbstractEntity {
 
 	@Column(name = "NOTE")
 	private String note;
-
-	@OneToMany(mappedBy = "supplier", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Equipment> equipments;
 }

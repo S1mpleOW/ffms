@@ -7,7 +7,7 @@ import s1mple.dlowji.ffms_refactor.entities.Customer;
 import java.time.LocalDateTime;
 import java.time.ZonedDateTime;
 
-@Projection(name = "customAccount", types = {Account.class})
+@Projection(name = "partialAccount", types = {Account.class})
 public interface PartialAccountProjection {
 	String getFullName();
 

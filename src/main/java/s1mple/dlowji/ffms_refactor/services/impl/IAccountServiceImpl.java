@@ -2,6 +2,7 @@ package s1mple.dlowji.ffms_refactor.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import s1mple.dlowji.ffms_refactor.entities.Account;
 import s1mple.dlowji.ffms_refactor.repositories.AccountRepository;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public class IAccountServiceImpl implements IAccountService {
 	@Autowired
 	private AccountRepository accountRepository;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@Override
 	public Optional<Account> findAccountByEmail(String email) {
@@ -47,6 +51,7 @@ public class IAccountServiceImpl implements IAccountService {
 
 	@Override
 	public Account save(Account account) {
+		account.setPassword(passwordEncoder.encode(account.getPassword()));
 		return accountRepository.save(account);
 	}
 

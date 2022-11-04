@@ -20,6 +20,8 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 public class UserPrincipal implements UserDetails {
+	private Long id;
+
 	private String fullName;
 
 	@Convert(converter = SexConverter.class)
@@ -42,8 +44,8 @@ public class UserPrincipal implements UserDetails {
 	public static UserPrincipal build(Account account) {
 		List<SimpleGrantedAuthority> authorities =
 		account.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName().getName())).collect(Collectors.toList());
-		System.out.println(authorities);
 		return UserPrincipal.builder()
+		.id(account.getId())
 		.address(account.getAddress())
 		.dob(account.getDob())
 		.fullName(account.getFullName())

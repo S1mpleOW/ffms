@@ -10,19 +10,18 @@ public class ServiceReceiptDetail {
     @EmbeddedId
     private ServiceReceiptDetailKey id;
 
-    @JoinColumn(name = "SERVICE_RECEIPT_ID")
-    @MapsId("serviceReceiptId")
-    @ManyToOne
-    private ServiceReceipt serviceReceipt;
-
     @JoinColumn(name = "SERVICE_ID")
     @MapsId("serviceId")
     @ManyToOne
     private Service service;
 
-    // ENUM
-    @Column(name = "UNIT_PRICE")
-    private int unitPrice;
+    @JoinColumn(name = "SERVICE_RECEIPT_ID")
+    @MapsId("serviceReceiptId")
+    @ManyToOne
+    private ServiceReceipt serviceReceipt;
+
+    @Column(name = "PRICE")
+    private int price;
 
     @Column(name = "QUANTITY")
     private int quantity;

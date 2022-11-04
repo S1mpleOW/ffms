@@ -14,6 +14,6 @@ public class ImportReceiptDetailKey implements Serializable {
     @Column(name = "IMPORT_RECEIPT_ID")
     private Long importReceiptId;
 
-    @Column(name = "EQUIPMENT_ID")
-    private Long equipmentId;
+    @Column(name = "ITEM_ID")
+    private Long itemId;
 }

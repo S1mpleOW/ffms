@@ -21,10 +21,10 @@ public class ImportReceiptDetail {
 	@ManyToOne
 	private ImportReceipt importReceipt;
 
-	@JoinColumn(name = "EQUIPMENT_ID")
-	@MapsId("equipmentId")
+	@JoinColumn(name = "ITEM_ID")
+	@MapsId("itemId")
 	@ManyToOne
-	private Equipment equipment;
+	private Item item;
 
 	@Column(name = "DELIVERY_DATE")
 	private ZonedDateTime deliveryDate;

@@ -13,6 +13,7 @@ import java.time.ZonedDateTime;
 @ToString
 @Entity
 @Table(name = "employee")
+@Builder
 public class Employee extends AbstractEntity{
 	@Column(name = "IDENTITY_CARD")
 	private String identityCard;
@@ -27,7 +28,7 @@ public class Employee extends AbstractEntity{
 	@JoinColumn(name = "FIELD_GROUP_ID", referencedColumnName = "ID")
 	private FieldGroup fieldGroup;
 
-	@OneToOne(fetch =  FetchType.EAGER)
+	@OneToOne(fetch =  FetchType.EAGER, cascade = {CascadeType.REMOVE})
 	@JoinColumn(name = "ACCOUNT_ID", referencedColumnName = "ID")
 	private Account account;
 

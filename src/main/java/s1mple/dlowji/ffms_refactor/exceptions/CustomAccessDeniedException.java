@@ -27,6 +27,8 @@ public class CustomAccessDeniedException implements AccessDeniedHandler {
 	@Override
 	public void handle(HttpServletRequest req, HttpServletResponse res,
 										 AccessDeniedException accessDeniedException) throws IOException, ServletException {
+		System.out.println("access denied exception");
+		accessDeniedException.printStackTrace();
 		Map<String, Object> errorDetails = new HashMap<>();
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		errorDetails.put("message", "Access denied");

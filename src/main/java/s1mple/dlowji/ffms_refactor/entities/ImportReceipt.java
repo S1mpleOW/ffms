@@ -25,10 +25,7 @@ public class ImportReceipt extends AbstractEntity {
     @Column(name = "NOTE")
     private String note;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID")
     private Employee employee;
-
-    @OneToMany(mappedBy = "importReceipt", fetch = FetchType.LAZY)
-    private List<ImportReceiptDetail> importReceiptDetails;
 }

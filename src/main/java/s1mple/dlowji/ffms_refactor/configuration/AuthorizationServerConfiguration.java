@@ -1,23 +1,32 @@
 package s1mple.dlowji.ffms_refactor.configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import s1mple.dlowji.ffms_refactor.exceptions.CustomAccessDeniedException;
 import s1mple.dlowji.ffms_refactor.exceptions.CustomAuthenEntryPointException;
 import s1mple.dlowji.ffms_refactor.filters.JwtFilter;
+
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -34,32 +43,12 @@ public class AuthorizationServerConfiguration {
 	private CustomAuthenEntryPointException customAuthenEntryPointException;
 	@Bean
 	public SecurityFilterChain authServerSecurityFilterChain(HttpSecurity http) throws Exception {
-//		http.csrf().disable();
-//		http.authorizeRequests(auth -> {
-//			auth.antMatchers(HttpMethod.POST, "/eventmanagement-api/events").access("hasRole('ADMIN')");
-//			auth.antMatchers(HttpMethod.PATCH, "/eventmanagement-api/events/**").access("hasRole('ADMIN')");
-//			auth.antMatchers(HttpMethod.PUT, "/eventmanagement-api/events/**").access("hasRole('ADMIN')");
-//			auth.antMatchers("/eventmanagement-api/participants/**").access("hasRole('USER')");
-//			auth.antMatchers("/eventmanagement-api/events").authenticated();
-//			auth.antMatchers("/login").permitAll();
-//		});
-//		http.addFilterAt(loginFilter, BasicAuthenticationFilter.class);
-//		http.addFilterAt(jwtFilter, BasicAuthenticationFilter.class);
-//		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-//		http.exceptionHandling((ex) -> {
-//			ex.accessDeniedHandler((request, response, accessDeniedException) -> {
-//				response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-//				response.getWriter().println(accessDeniedException.getMessage());
-//			});
-//			ex.authenticationEntryPoint((request, response, auth) -> {
-//				response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//				response.getWriter().println(auth.getMessage());
-//			});
-//		});
 		http.csrf().disable();
+		http.cors(Customizer.withDefaults());
+		http.httpBasic(Customizer.withDefaults());
 		http.authorizeRequests((auth) -> {
 			auth.antMatchers("/auth/**").permitAll();
-
+			auth.anyRequest().authenticated();
 		});
 		http.addFilterAt(jwtFilter, BasicAuthenticationFilter.class);
 		http.exceptionHandling((ex) -> {
@@ -68,6 +57,16 @@ public class AuthorizationServerConfiguration {
 		});
 
 		return http.build();
+	}
+	@Bean
+	public CorsConfigurationSource corsConfiguration() {
+		CorsConfiguration corsConfig = new CorsConfiguration();
+		corsConfig.setAllowedOrigins(List.of("*"));
+		corsConfig.setAllowCredentials(true);
+		corsConfig.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", corsConfig);
+		return source;
 	}
 
 	@Bean

@@ -21,7 +21,6 @@ import java.util.Set;
 @ToString
 @Entity
 @Table(name = "account")
-
 @Builder
 public class Account extends AbstractEntity {
 
@@ -33,7 +32,7 @@ public class Account extends AbstractEntity {
 	private SexType sex;
 
 	@Column(name = "DOB")
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDateTime dob;
 
 	@Column(name = "ADDRESS")
@@ -55,7 +54,7 @@ public class Account extends AbstractEntity {
 	@Column(name = "UPDATED_AT")
 	private ZonedDateTime updatedAt;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
 	@JoinTable(name = "account_role", joinColumns = @JoinColumn(name =
 	"ACCOUNT_ID",
 	referencedColumnName = "ID"),

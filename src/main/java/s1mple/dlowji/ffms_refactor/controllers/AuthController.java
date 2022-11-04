@@ -57,6 +57,7 @@ public class AuthController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) {
+		System.out.println(signUpForm);
 		try {
 			if (iAccountService.existsByUsername(signUpForm.getUsername())) {
 				return new ResponseEntity<>(new ResponseMessage("The username is " +
@@ -82,7 +83,7 @@ public class AuthController {
 			.address(signUpForm.getAddress())
 			.fullName(signUpForm.getFullName())
 			.username(signUpForm.getUsername())
-			.password(passwordEncoder.encode(signUpForm.getPassword()))
+			.password(signUpForm.getPassword())
 			.build();
 
 			account.setRoles(roles);
@@ -105,6 +106,7 @@ public class AuthController {
 	public ResponseEntity<?> login(@Valid @RequestBody SignInForm signInForm) {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInForm.getUsername(),
 		signInForm.getPassword()));
+		System.out.println(authentication);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtHelper.createToken(authentication);
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

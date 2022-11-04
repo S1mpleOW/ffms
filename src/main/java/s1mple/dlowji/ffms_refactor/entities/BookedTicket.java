@@ -1,6 +1,7 @@
 package s1mple.dlowji.ffms_refactor.entities;
 
 import lombok.*;
+import s1mple.dlowji.ffms_refactor.entities.converters.PaymentConverter;
 import s1mple.dlowji.ffms_refactor.entities.enums.PaymentStatus;
 
 import javax.persistence.*;
@@ -19,17 +20,17 @@ public class BookedTicket extends AbstractEntity {
     private int totalPrice;
 
     @Column(name = "PAYMENT_STATUS")
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = PaymentConverter.class)
     private PaymentStatus paymentStatus;
 
     @Column(name = "NOTE")
     private String note;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-    private Customer user;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CUSTOMER_ID", referencedColumnName = "ID")
+    private Customer customer;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "EMPLOYEE_ID", referencedColumnName = "ID")
     private Employee employee;
 

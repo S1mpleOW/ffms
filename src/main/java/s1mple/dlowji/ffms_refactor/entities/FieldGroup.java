@@ -12,7 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Table(name = "field_group")
 public class FieldGroup extends AbstractEntity {
 	@Column(name = "ADDRESS")

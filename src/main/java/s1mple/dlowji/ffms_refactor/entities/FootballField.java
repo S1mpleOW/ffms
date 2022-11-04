@@ -2,6 +2,9 @@ package s1mple.dlowji.ffms_refactor.entities;
 
 import lombok.*;
 import org.springframework.data.rest.core.annotation.RestResource;
+import s1mple.dlowji.ffms_refactor.entities.converters.FieldTypeConverter;
+import s1mple.dlowji.ffms_refactor.entities.converters.SexConverter;
+import s1mple.dlowji.ffms_refactor.entities.enums.FieldType;
 
 import javax.persistence.*;
 
@@ -18,11 +21,15 @@ public class FootballField extends AbstractEntity {
 	private String name;
 
 	@Column(name = "TYPE")
-	private int type;
+	@Convert(converter = FieldTypeConverter.class)
+	private FieldType type;
 
 	@Column(name = "IMAGE")
 	@Lob
 	private String image;
+
+	@Column(name = "PRICE" , columnDefinition = "DOUBLE DEFAULT 0")
+	private double price;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "FIELD_GROUP_ID", referencedColumnName = "ID")

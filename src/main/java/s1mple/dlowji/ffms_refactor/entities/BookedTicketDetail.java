@@ -1,11 +1,19 @@
 package s1mple.dlowji.ffms_refactor.entities;
 
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZonedDateTime;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "booked_ticket_detail")
 public class BookedTicketDetail {
     @EmbeddedId
@@ -22,14 +30,15 @@ public class BookedTicketDetail {
     private FootballField footballField;
 
     @Column(name = "START_TIME")
-    private LocalTime startTime;
+    private LocalDateTime startTime;
 
     @Column(name = "END_TIME")
-    private LocalTime endTime;
+    private LocalDateTime endTime;
 
     @Column(name = "DEPOSIT")
     private int deposit;
 
     @Column(name = "ORDER_DATE")
+    @CreationTimestamp
     private ZonedDateTime orderDate;
 }

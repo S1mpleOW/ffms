@@ -23,6 +23,8 @@ public class CustomAuthenEntryPointException implements AuthenticationEntryPoint
 	@Override
 	public void commence(HttpServletRequest req, HttpServletResponse res,
 											 AuthenticationException authException) throws IOException, ServletException {
+		System.out.println("auth exception");
+		authException.printStackTrace();
 		Map<String, Object> errorDetails = new HashMap<>();
 		res.setContentType(MediaType.APPLICATION_JSON_VALUE);
 		errorDetails.put("message", authException.getMessage());
