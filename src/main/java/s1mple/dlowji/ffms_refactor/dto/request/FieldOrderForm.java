@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 public class FieldOrderForm {
 	@NotNull(message = "Field id must not null")
 	private Long field_id;
-	@NotNull(message = "Customer id must not null")
-	private Long customer_id;
+
+	@NotNull(message = "Phone number must not null")
+	private String phone;
 
 	// format date time yyyy-MM-dd'T'HH:mm:ss.SSSXXX
 	@NotNull(message = "Please enter start time")

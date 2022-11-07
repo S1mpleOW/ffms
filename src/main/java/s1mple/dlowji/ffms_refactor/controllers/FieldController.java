@@ -50,13 +50,30 @@ public class FieldController {
 			"existed", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		}
 
-		if (!customerService.existsById(fieldOrderForm.getCustomer_id())) {
-			return new ResponseEntity<>(new ResponseMessage("The customer is not " +
-			"existed", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
-		}
+			if (!customerService.existsByPhoneNumber(fieldOrderForm.getPhone())) {
+				return new ResponseEntity<>(new ResponseMessage("The customer is not " +
+				"existed", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
+			}
 
 		if (footballFieldService.check_available_space(fieldOrderForm.getStart_time(), fieldOrderForm.getEnd_time())) {
 			return new ResponseEntity<>(new ResponseMessage("The field is ordered",
+			HttpStatus.OK.value()), HttpStatus.OK);
+		}
+		int hours =
+		fieldOrderForm.getEnd_time().getHour() - fieldOrderForm.getStart_time().getHour();
+		int minutes =
+		fieldOrderForm.getEnd_time().getMinute() - fieldOrderForm.getStart_time().getMinute();
+		if(hours * 60 + minutes < 60) {
+			return new ResponseEntity<>(new ResponseMessage("The field must be " +
+			"ordered at least 60 minutes",
+			HttpStatus.OK.value()), HttpStatus.OK);
+		}
+		LocalDateTime now = LocalDateTime.now();
+		boolean isAfterStartTime = now.isAfter(fieldOrderForm.getStart_time());
+		boolean isAfterEndTime = now.isAfter(fieldOrderForm.getEnd_time());
+		if(isAfterStartTime || isAfterEndTime) {
+			return new ResponseEntity<>(new ResponseMessage("Please choose the next" +
+			" time from now",
 			HttpStatus.OK.value()), HttpStatus.OK);
 		}
 
@@ -64,15 +81,11 @@ public class FieldController {
 
 		FootballField footballField =
 		footballFieldService.findById(footballFieldId).get();
-		int hours =
-		fieldOrderForm.getEnd_time().getHour() - fieldOrderForm.getStart_time().getHour();
-		int minutes =
-		fieldOrderForm.getEnd_time().getMinute() - fieldOrderForm.getStart_time().getMinute();
+
+
 		int totalPrice = (int) Math.floor(footballField.getPrice() * (hours + minutes / 60));
-
 		Customer customer =
-		customerService.findCustomerById(fieldOrderForm.getCustomer_id()).get();
-
+		customerService.findCustomerByPhone(fieldOrderForm.getPhone()).get();
 
 		BookedTicket receipt =
 		BookedTicket.builder().customer(customer).paymentStatus(PaymentStatus.PROCESSING).totalPrice(totalPrice).build();

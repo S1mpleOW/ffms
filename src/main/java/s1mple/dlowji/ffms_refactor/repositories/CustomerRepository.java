@@ -16,4 +16,8 @@ public interface CustomerRepository extends JpaRepository<Customer, Long> {
 	Optional<Customer> findCustomerByAccount_Id(Long aLong);
 
 	Page<Customer> findAll(Pageable pageable);
+
+	boolean existsCustomerByAccount_Phone(String phone);
+
+	Optional<Customer> findCustomerByAccount_Phone(String phone);
 }

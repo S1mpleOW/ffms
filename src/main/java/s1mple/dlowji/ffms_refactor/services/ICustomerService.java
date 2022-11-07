@@ -20,4 +20,7 @@ public interface ICustomerService {
 
 	Optional<Customer> findCustomerByAccountId(Long id);
 
+	boolean existsByPhoneNumber(String phone);
+
+	Optional<Customer> findCustomerByPhone(String phone);
 }

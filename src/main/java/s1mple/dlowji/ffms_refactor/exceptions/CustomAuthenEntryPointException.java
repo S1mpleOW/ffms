@@ -33,4 +33,5 @@ public class CustomAuthenEntryPointException implements AuthenticationEntryPoint
 		res.setStatus(403);
 		mapper.writeValue(res.getWriter(), errorDetails);
 	}
+
 }

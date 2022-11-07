@@ -10,6 +10,7 @@ import s1mple.dlowji.ffms_refactor.repositories.FootballFieldRepository;
 import s1mple.dlowji.ffms_refactor.services.IFootballFieldService;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,10 +29,9 @@ public class IFootballFieldServiceImpl implements IFootballFieldService {
 	@Override
 	public boolean check_available_space(LocalDateTime startTime,
 																			 LocalDateTime endTime) {
-		Optional<BookedTicketDetail> isAvailable =
-		bookedTicketDetailRepository.findByStartTimeGreaterThanEqualAndEndTimeLessThanEqual(startTime, endTime);
-		System.out.println("is available " + isAvailable);
-		if (isAvailable.isPresent()) {
+		List<BookedTicketDetail> isBooked =
+		bookedTicketDetailRepository.findByStartTimeBetweenOrEndTimeBetween(startTime, endTime, startTime, endTime);
+		if (!isBooked.isEmpty()) {
 			return true;
 		}
 		return false;

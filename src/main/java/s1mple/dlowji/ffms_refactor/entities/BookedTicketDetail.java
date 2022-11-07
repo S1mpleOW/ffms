@@ -41,4 +41,5 @@ public class BookedTicketDetail {
     @Column(name = "ORDER_DATE")
     @CreationTimestamp
     private ZonedDateTime orderDate;
+
 }

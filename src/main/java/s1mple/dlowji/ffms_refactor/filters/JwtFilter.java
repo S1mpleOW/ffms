@@ -32,6 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtHelper jwtHelper;
 
+
 	@Autowired
 	private UserDetailsService userDetailsService;
 
@@ -83,7 +84,7 @@ public class JwtFilter extends OncePerRequestFilter {
 		boolean isNotFilltered = request.getRequestURI().startsWith("/auth/login")
 		|| request.getRequestURI().startsWith("/auth/register")
 		|| request.getRequestURI().startsWith("/api/football_fields") && request.getMethod().equals("GET");
-		System.out.println(request.getRequestURI());
+
 		return isNotFilltered;
 	}
 }

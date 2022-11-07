@@ -10,7 +10,6 @@ import s1mple.dlowji.ffms_refactor.entities.Item;
 import s1mple.dlowji.ffms_refactor.entities.Service;
 
 @RepositoryRestResource
-@CrossOrigin("*")
 public interface ServicesRepository extends JpaRepository<Service, Long> {
 
 }

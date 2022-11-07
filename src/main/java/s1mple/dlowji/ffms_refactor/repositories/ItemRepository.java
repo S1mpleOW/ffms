@@ -13,24 +13,24 @@ import s1mple.dlowji.ffms_refactor.entities.Item;
 
 
 @Repository
-@CrossOrigin("*")
 public interface ItemRepository extends JpaRepository<Item, Long> {
 	@RestResource(path="category", rel = "category")
 	@Query("select i from Item i where lower(i.itemCategory) like lower(concat" +
 	"('%', ?1, '%'))")
 	Page<Item> searchItemsByItemCategoryEqualsIgnoreCase(@Param("category") String itemCategory, Pageable pageable);
+	@Override
+	@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
+	Item save(Item entity);
 
 	@Override
 	@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-	 Item save(Item entity);
+	void deleteById(Long aLong);
 
-	@Override
-	@PreAuthorize("hasAnyAuthority('ADMIN', 'EMPLOYEE')")
-	default void deleteById(Long aLong) {
+	boolean existsByNameIgnoreCase(String name);
 
-	}
+	Item findByNameIgnoreCase(String name);
 
-	public boolean existsByNameIgnoreCase(String name);
-
-	public Item findByNameIgnoreCase(String name);
+	@RestResource(path = "supplier", rel = "items")
+	Page<Item> searchItemsBySupplier_Id(@Param("id") Long id,
+																			Pageable pageable);
 }

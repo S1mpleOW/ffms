@@ -9,9 +9,6 @@ import java.time.LocalDateTime;
 
 @Projection(name = "partialCustomer", types = {Customer.class})
 public interface PartialCustomerProjection {
-	@Value("#{target.id}")
-	Long getId();
-
 	@Value("#{target.account.fullName}")
 	String getFullName();
 

@@ -8,13 +8,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import s1mple.dlowji.ffms_refactor.dto.request.SignInForm;
 import s1mple.dlowji.ffms_refactor.dto.request.SignUpForm;
+import s1mple.dlowji.ffms_refactor.dto.request.TokenDTO;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseJwt;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
 import s1mple.dlowji.ffms_refactor.entities.Account;
@@ -27,6 +27,7 @@ import s1mple.dlowji.ffms_refactor.services.IAccountService;
 import s1mple.dlowji.ffms_refactor.services.impl.ICustomerServiceImpl;
 import s1mple.dlowji.ffms_refactor.services.impl.IRoleServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashSet;
 import java.util.List;
@@ -54,6 +55,9 @@ public class AuthController {
 
 	@Autowired
 	private JwtHelper jwtHelper;
+
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) {
@@ -93,8 +97,7 @@ public class AuthController {
 			return new ResponseEntity<>(new ResponseMessage("Create success",
 			HttpStatus.OK.value()),
 			HttpStatus.OK);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(new ResponseMessage(e.getMessage(),
 			HttpStatus.INTERNAL_SERVER_ERROR.value()),
@@ -110,10 +113,11 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String token = jwtHelper.createToken(authentication);
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-		List<String > roles =
+		List<String> roles =
 		userPrincipal.getRoles().stream().map(role -> role.getAuthority()).collect(Collectors.toList());
 		System.out.println(roles);
 
 		return ResponseEntity.ok(ResponseJwt.builder().token(token).name(userPrincipal.getFullName()).roles(roles).type("Bearer").build());
 	}
+
 }

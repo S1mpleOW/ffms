@@ -6,6 +6,8 @@ import s1mple.dlowji.ffms_refactor.entities.Item;
 import s1mple.dlowji.ffms_refactor.repositories.ItemRepository;
 import s1mple.dlowji.ffms_refactor.services.ItemService;
 
+import java.util.Optional;
+
 @Service
 public class IItemServiceImpl implements ItemService {
 
@@ -15,6 +17,19 @@ public class IItemServiceImpl implements ItemService {
     @Override
     public Item save(Item item) {
         return itemRepository.save(item);
+    }
+
+    @Override
+    public Item findById(Long id) {
+        Optional<Item> optionalItem = itemRepository.findById(id);
+        if(optionalItem.isEmpty() && !optionalItem.isPresent())
+            return null;
+        return optionalItem.get();
+    }
+
+    @Override
+    public boolean existsById(Long id) {
+        return itemRepository.existsById(id);
     }
 
     public boolean existsByNameIgnoreCase(String name) {

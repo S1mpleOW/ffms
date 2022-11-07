@@ -28,7 +28,7 @@ public class ImportItemsForm {
     private int import_price;
 
     @NotNull(message = "Item category must not null")
-    private ItemCategory itemCategory;
+    private ItemCategory item_category;
 
     @NotNull(message = "Item's name must not null")
     private String name;
@@ -44,6 +44,6 @@ public class ImportItemsForm {
 
     // format date time yyyy-MM-dd'T'HH:mm:ss.SSSXXX
     @NotNull(message = "Please enter delivery date")
-    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime delivery_date;
 }

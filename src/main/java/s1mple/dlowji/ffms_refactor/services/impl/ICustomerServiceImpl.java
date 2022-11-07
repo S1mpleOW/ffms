@@ -52,4 +52,15 @@ public class ICustomerServiceImpl implements ICustomerService {
 	public Optional<Customer> findCustomerByAccountId(Long id) {
 		return customerRepository.findCustomerByAccount_Id(id);
 	}
+
+	@Override
+	public boolean existsByPhoneNumber(String phone) {
+		return customerRepository.existsCustomerByAccount_Phone(phone);
+	}
+
+	@Override
+	public Optional<Customer> findCustomerByPhone(String phone) {
+
+		return customerRepository.findCustomerByAccount_Phone(phone);
+	}
 }

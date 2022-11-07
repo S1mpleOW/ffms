@@ -14,6 +14,10 @@ import java.util.List;
 @Builder
 @Table(name = "field_group")
 public class FieldGroup extends AbstractEntity {
+
+	@Column(name = "NAME")
+	private String name;
+
 	@Column(name = "ADDRESS")
 	private String address;
 
