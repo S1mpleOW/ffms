@@ -5,21 +5,23 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import s1mple.dlowji.ffms_refactor.dto.request.ImportItemsForm;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
 import s1mple.dlowji.ffms_refactor.entities.*;
 import s1mple.dlowji.ffms_refactor.entities.enums.EquipmentStatus;
 import s1mple.dlowji.ffms_refactor.entities.enums.PaymentStatus;
-import s1mple.dlowji.ffms_refactor.repositories.*;
+import s1mple.dlowji.ffms_refactor.repositories.EmployeeRepository;
+import s1mple.dlowji.ffms_refactor.repositories.ImportDetailRepository;
+import s1mple.dlowji.ffms_refactor.repositories.ImportRepository;
+import s1mple.dlowji.ffms_refactor.repositories.SupplierRepository;
 import s1mple.dlowji.ffms_refactor.security.userprincipal.UserPrincipal;
+import s1mple.dlowji.ffms_refactor.services.IImportReceiptService;
 import s1mple.dlowji.ffms_refactor.services.ItemService;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,6 +33,9 @@ public class ImportController {
 
     @Autowired
     private ItemService itemService;
+
+    @Autowired
+    private IImportReceiptService importReceiptService;
 
     @Autowired
     private SupplierRepository supplierRepository;
@@ -132,6 +137,26 @@ public class ImportController {
         response.put("total_price", totalPrice);
         response.put("payment_status", PaymentStatus.PROCESSING.toString());
         response.put("created_at", receiptBody.getCreatedAt());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/import-price/{year}/{quarter}")
+    public ResponseEntity<?> getTotalImportPriceByQuarter(@PathVariable("year") int year, @PathVariable("quarter") int quarter) {
+
+        List<ImportReceipt> importReceiptList = importReceiptService.getImportReceiptsByQuarter(quarter, year);
+
+        int totalPrice = 0;
+
+        for (ImportReceipt receipt:importReceiptList) {
+            totalPrice += receipt.getTotalPrice();
+        }
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.OK.value());
+        response.put("total_price", totalPrice);
+        response.put("year", year);
+        response.put("quarter", quarter);
+
         return ResponseEntity.ok(response);
     }
 }
