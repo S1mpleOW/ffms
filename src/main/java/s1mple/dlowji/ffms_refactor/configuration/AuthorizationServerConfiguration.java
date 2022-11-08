@@ -45,7 +45,7 @@ public class AuthorizationServerConfiguration {
 		http.cors(Customizer.withDefaults());
 		http.authorizeRequests((auth) -> {
 			auth.antMatchers("/auth/**").permitAll();
-			auth.antMatchers(("/api/football_fields")).permitAll();
+			auth.antMatchers(("/api/football_fields/**")).permitAll();
 			auth.anyRequest().authenticated();
 		});
 		http.addFilterAt(jwtFilter, BasicAuthenticationFilter.class);

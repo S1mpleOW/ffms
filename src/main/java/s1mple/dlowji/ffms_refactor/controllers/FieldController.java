@@ -57,8 +57,9 @@ public class FieldController {
 
 		if (footballFieldService.check_available_space(fieldOrderForm.getStart_time(), fieldOrderForm.getEnd_time())) {
 			return new ResponseEntity<>(new ResponseMessage("The field is ordered",
-			HttpStatus.OK.value()), HttpStatus.OK);
+			HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		}
+
 		int hours =
 		fieldOrderForm.getEnd_time().getHour() - fieldOrderForm.getStart_time().getHour();
 		int minutes =
@@ -66,15 +67,15 @@ public class FieldController {
 		if(hours * 60 + minutes < 60) {
 			return new ResponseEntity<>(new ResponseMessage("The field must be " +
 			"ordered at least 60 minutes",
-			HttpStatus.OK.value()), HttpStatus.OK);
+			HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		}
 		LocalDateTime now = LocalDateTime.now();
-		boolean isAfterStartTime = now.isAfter(fieldOrderForm.getStart_time());
-		boolean isAfterEndTime = now.isAfter(fieldOrderForm.getEnd_time());
-		if(isAfterStartTime || isAfterEndTime) {
+		boolean isStartTimeBeforeNow = fieldOrderForm.getStart_time().isBefore(now);
+		boolean isEndTimeBeforeNow = fieldOrderForm.getEnd_time().isBefore(now);
+		if(isStartTimeBeforeNow || isEndTimeBeforeNow) {
 			return new ResponseEntity<>(new ResponseMessage("Please choose the next" +
 			" time from now",
-			HttpStatus.OK.value()), HttpStatus.OK);
+			HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
 		}
 
 		Long footballFieldId = fieldOrderForm.getField_id();
@@ -179,18 +180,16 @@ public class FieldController {
 		LocalDateTime firstDayOfWeek = currentDay.minusDays(days.get(dayOfWeek)).atStartOfDay();
 		LocalDateTime lastDayOfWeek = currentDay.plusDays(neededDay).atStartOfDay();
 
-		System.out.println(firstDayOfWeek);
-		System.out.println(lastDayOfWeek);
-
 		List<BookedTicketDetail> bookedTicketDetailList = bookedTicketService.getBookedTicketDetailByWeek(firstDayOfWeek, lastDayOfWeek, field_id);
 		List<Map<String, Object>> datas = new ArrayList<>();
-
+		int i = 0;
 		for (BookedTicketDetail btd:bookedTicketDetailList) {
 			Map<String, Object> data = new HashMap<>();
-			data.put("id", btd.getFootballField().getId());
+			i++;
+			data.put("field_id", btd.getFootballField().getId());
 			data.put("start", btd.getStartTime());
 			data.put("end", btd.getEndTime());
-
+			data.put("id", i);
 			datas.add(data);
 		}
 

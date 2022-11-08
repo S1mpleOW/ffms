@@ -13,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Table(name = "booked_ticket")
 public class BookedTicket extends AbstractEntity {
     @Column(name = "TOTAL_PRICE")

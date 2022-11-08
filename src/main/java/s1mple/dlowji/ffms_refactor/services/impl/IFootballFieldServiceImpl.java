@@ -10,6 +10,7 @@ import s1mple.dlowji.ffms_refactor.repositories.FootballFieldRepository;
 import s1mple.dlowji.ffms_refactor.services.IFootballFieldService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +31,7 @@ public class IFootballFieldServiceImpl implements IFootballFieldService {
 	public boolean check_available_space(LocalDateTime startTime,
 																			 LocalDateTime endTime) {
 		List<BookedTicketDetail> isBooked =
-		bookedTicketDetailRepository.findByStartTimeBetweenOrEndTimeBetween(startTime, endTime, startTime, endTime);
+		bookedTicketDetailRepository.findByStartTimeGreaterThanAndStartTimeLessThanOrEndTimeGreaterThanAndEndTimeLessThan(startTime, endTime, startTime, endTime);
 		if (!isBooked.isEmpty()) {
 			return true;
 		}
@@ -41,4 +42,17 @@ public class IFootballFieldServiceImpl implements IFootballFieldService {
 	public Optional<FootballField> findById(Long id) {
 		return footballFieldRepository.findById(id);
 	}
+
+	@Override
+	public List<FootballField> getFieldByBookedTicketDetails(List<BookedTicketDetail> bookedTicketDetailList) {
+		List<FootballField> footballFieldList = new ArrayList<>();
+
+		for (BookedTicketDetail btd:bookedTicketDetailList) {
+			footballFieldList.add(btd.getFootballField());
+		}
+
+		return footballFieldList;
+	}
+
+
 }

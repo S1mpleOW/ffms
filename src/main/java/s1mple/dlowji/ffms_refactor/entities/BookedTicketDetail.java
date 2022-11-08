@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@ToString
 @Table(name = "booked_ticket_detail")
 public class BookedTicketDetail {
     @EmbeddedId

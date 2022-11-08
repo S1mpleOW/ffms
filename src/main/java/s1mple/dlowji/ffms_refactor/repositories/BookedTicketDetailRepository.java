@@ -12,7 +12,7 @@ import java.util.Optional;
 @RepositoryRestResource(excerptProjection =
 BookedFieldProjection.class)
 public interface BookedTicketDetailRepository extends JpaRepository<BookedTicketDetail, Long> {
-	List<BookedTicketDetail> findByStartTimeBetweenOrEndTimeBetween(LocalDateTime startTime,
+	List<BookedTicketDetail> findByStartTimeGreaterThanAndStartTimeLessThanOrEndTimeGreaterThanAndEndTimeLessThan(LocalDateTime startTime,
 																								LocalDateTime endTime,
 																																	LocalDateTime startTimeEnd,
 																																	LocalDateTime endTimeEnd);

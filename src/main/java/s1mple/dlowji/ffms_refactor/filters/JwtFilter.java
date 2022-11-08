@@ -81,10 +81,10 @@ public class JwtFilter extends OncePerRequestFilter {
 
 	@Override
 	protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
 		boolean isNotFilltered = request.getRequestURI().startsWith("/auth/login")
 		|| request.getRequestURI().startsWith("/auth/register")
 		|| request.getRequestURI().startsWith("/api/football_fields") && request.getMethod().equals("GET");
-
 		return isNotFilltered;
 	}
 }

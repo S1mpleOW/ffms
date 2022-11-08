@@ -11,7 +11,7 @@ import s1mple.dlowji.ffms_refactor.entities.FieldGroup;
 
 import java.util.Optional;
 
-@RepositoryRestResource(path = "groups")
+@RepositoryRestResource(path = "groups", collectionResourceRel = "groups")
 @PreAuthorize("hasAuthority('ADMIN')")
 public interface FieldGroupRepository extends CrudRepository<FieldGroup, Long> {
 	FieldGroup save(FieldGroup fieldGroup);

@@ -16,5 +16,4 @@ public interface IFootballFieldService {
 
 	List<FootballField> getFieldByBookedTicketDetails(List<BookedTicketDetail> bookedTicketDetailList);
 
-	List<FootballField> getBookedFieldByWeek(LocalDateTime firstDay, LocalDateTime lastDay);
 }
