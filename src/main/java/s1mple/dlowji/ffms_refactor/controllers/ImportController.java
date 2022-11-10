@@ -179,9 +179,9 @@ public class ImportController {
 		.quantity(importItemsForm.getQuantity())
 		.build();
 
-		Item savedItem = itemService.save(item);
+		itemService.save(item);
 		ImportReceipt receiptBody = importRepository.save(receipt);
-		ImportReceiptDetail receiptDetailBody = importDetailRepository.save(receiptDetail);
+		importDetailRepository.save(receiptDetail);
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("status", HttpStatus.OK.value());

@@ -42,7 +42,7 @@ public class ICustomerServiceImpl implements ICustomerService {
 	@Override
 	public Customer deleteById(Long id) {
 		Optional<Customer> customer = customerRepository.findById(id);
-		if(customer.isPresent()) {
+		if(customer.isPresent() && !customer.isEmpty()) {
 			customerRepository.deleteById(id);
 		}
 		return customer.get();

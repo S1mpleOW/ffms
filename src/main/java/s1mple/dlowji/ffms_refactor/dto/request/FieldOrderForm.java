@@ -2,6 +2,7 @@ package s1mple.dlowji.ffms_refactor.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotEmpty;
@@ -21,6 +22,7 @@ public class FieldOrderForm {
 	private Long field_id;
 
 	@NotNull(message = "Phone number must not null")
+	@Length(min = 10, max = 10 , message = "Phone number must be 10 characters")
 	private String phone;
 
 	// format date time yyyy-MM-dd'T'HH:mm:ss.SSSXXX

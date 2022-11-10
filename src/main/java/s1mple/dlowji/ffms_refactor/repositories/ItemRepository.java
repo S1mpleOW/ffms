@@ -33,4 +33,6 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 	@RestResource(path = "supplier", rel = "items")
 	Page<Item> searchItemsBySupplier_Id(@Param("id") Long id,
 																			Pageable pageable);
+
+	Item findItemById(Long id);
 }

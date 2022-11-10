@@ -84,7 +84,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
 		boolean isNotFilltered = request.getRequestURI().startsWith("/auth/login")
 		|| request.getRequestURI().startsWith("/auth/register")
-		|| request.getRequestURI().startsWith("/api/football_fields") && request.getMethod().equals("GET");
+		|| request.getRequestURI().startsWith("/api/football_fields") && request.getMethod().equals("GET")
+		|| request.getRequestURI().startsWith("/api/services") && request.getMethod().equals("GET");
 		return isNotFilltered;
 	}
 }

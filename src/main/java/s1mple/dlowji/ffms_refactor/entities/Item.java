@@ -7,6 +7,7 @@ import s1mple.dlowji.ffms_refactor.entities.enums.EquipmentStatus;
 import s1mple.dlowji.ffms_refactor.entities.enums.ItemCategory;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Setter
@@ -47,4 +48,7 @@ public class Item extends AbstractEntity {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "SUPPLIER_ID", referencedColumnName = "ID")
 	private Supplier supplier;
+
+	@OneToMany(mappedBy = "item", fetch = FetchType.LAZY)
+	private List<ServiceReceiptDetail> serviceReceiptDetails;
 }

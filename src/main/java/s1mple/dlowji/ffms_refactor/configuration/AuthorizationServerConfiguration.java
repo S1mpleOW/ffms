@@ -46,6 +46,7 @@ public class AuthorizationServerConfiguration {
 		http.authorizeRequests((auth) -> {
 			auth.antMatchers("/auth/**").permitAll();
 			auth.antMatchers(("/api/football_fields/**")).permitAll();
+			auth.antMatchers(("/api/services/**")).permitAll();
 			auth.anyRequest().authenticated();
 		});
 		http.addFilterAt(jwtFilter, BasicAuthenticationFilter.class);

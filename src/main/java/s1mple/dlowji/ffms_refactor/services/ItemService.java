@@ -12,4 +12,6 @@ public interface ItemService {
     boolean existsByNameIgnoreCase(String name);
 
     Item findByName(String name);
+
+    int findSellPrice(Long id);
 }

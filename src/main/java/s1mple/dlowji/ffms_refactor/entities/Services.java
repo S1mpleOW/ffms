@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -15,7 +14,7 @@ import java.util.Set;
 @Builder
 @ToString
 @Table(name = "service")
-public class Service extends AbstractEntity {
+public class Services extends AbstractEntity {
 
 	@Column(name = "NAME")
 	private String name;
@@ -31,6 +30,5 @@ public class Service extends AbstractEntity {
 	"ID"))
 	private Set<Item> items = new HashSet<>();
 
-	@OneToMany(mappedBy = "service", fetch = FetchType.LAZY)
-	private List<ServiceReceiptDetail> serviceReceiptDetails;
+
 }
