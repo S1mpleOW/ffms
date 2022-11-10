@@ -121,11 +121,11 @@ public class IBookedTicketServiceImpl implements IBookedTicketService {
 
 	@Override
 	public int getBookedPriceByMonth(int month, int year) {
-		List<BookedTicket> bookedTicketList = bookedTicketRepository.findAll();
+		List<BookedTicket> bookedTicketList = new ArrayList<>();
 
-		for (BookedTicket receipt: bookedTicketList) {
-			if (receipt.getCreatedAt().getYear() != year || receipt.getCreatedAt().getMonthValue() != month) {
-				bookedTicketList.remove(receipt);
+		for (BookedTicket receipt: bookedTicketRepository.findAll()) {
+			if (receipt.getCreatedAt().getYear() == year && receipt.getCreatedAt().getMonthValue() == month) {
+				bookedTicketList.add(receipt);
 			}
 		}
 

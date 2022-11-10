@@ -27,7 +27,7 @@ public class StatisticController {
     @Autowired
     private ItemService itemService;
 
-    @GetMapping("/import-price/{year}/{month}")
+    @GetMapping("/import-price/{year]/{month}")
     public ResponseEntity<?> getImportPriceByMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
         int totalPrice = importReceiptService.getImportReceiptsByMonth(month, year);
 
@@ -53,7 +53,7 @@ public class StatisticController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/booked-price/{year}/{month}")
+    @GetMapping("/booked-price/{year]/{month}")
     public ResponseEntity<?> getBookedPriceByMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
         int totalPrice = bookedTicketService.getBookedPriceByMonth(month, year);
 

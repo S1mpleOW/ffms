@@ -7,6 +7,7 @@ import s1mple.dlowji.ffms_refactor.repositories.ImportRepository;
 import s1mple.dlowji.ffms_refactor.services.IImportReceiptService;
 
 import java.time.temporal.IsoFields;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,11 +31,11 @@ public class IImportReceiptServiceImpl implements IImportReceiptService {
 
     @Override
     public int getImportReceiptsByMonth(int month, int year) {
-        List<ImportReceipt> importReceiptList = importRepository.findAll();
+        List<ImportReceipt> importReceiptList = new ArrayList<>();
 
-        for (ImportReceipt receipt: importReceiptList) {
-            if (receipt.getCreatedAt().getYear() != year || receipt.getCreatedAt().getMonthValue() != month) {
-                importReceiptList.remove(receipt);
+        for (ImportReceipt receipt: importRepository.findAll()) {
+            if (receipt.getCreatedAt().getYear() == year && receipt.getCreatedAt().getMonthValue() == month) {
+                importReceiptList.add(receipt);
             }
         }
 
