@@ -11,6 +11,7 @@ import s1mple.dlowji.ffms_refactor.repositories.ServicesReceiptRepository;
 import s1mple.dlowji.ffms_refactor.repositories.ServicesRepository;
 import s1mple.dlowji.ffms_refactor.services.ItemService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -68,11 +69,11 @@ public class IItemServiceImpl implements ItemService {
 
     @Override
     public int getPurchasePriceByMonth(int month, int year) {
-        List<ServiceReceipt> serviceReceiptList = servicesReceiptRepository.findAll();
+        List<ServiceReceipt> serviceReceiptList = new ArrayList<>();
 
-        for (ServiceReceipt receipt: serviceReceiptList) {
-            if (receipt.getCreatedAt().getYear() != year || receipt.getCreatedAt().getMonthValue() != month) {
-                serviceReceiptList.remove(receipt);
+        for (ServiceReceipt receipt: servicesReceiptRepository.findAll()) {
+            if (receipt.getCreatedAt().getYear() == year && receipt.getCreatedAt().getMonthValue() == month) {
+                serviceReceiptList.add(receipt);
             }
         }
 
