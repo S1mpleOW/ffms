@@ -20,4 +20,6 @@ public interface IBookedTicketService {
 	List<BookedTicketDetail> getBookedTicketDetailByWeek(LocalDateTime firstDay, LocalDateTime lastDay, Long field_id);
 
 	List<BookedTicket> getBookedTicketByQuarter(int year, int quarter);
+
+	int getBookedPriceByMonth(int month, int year);
 }

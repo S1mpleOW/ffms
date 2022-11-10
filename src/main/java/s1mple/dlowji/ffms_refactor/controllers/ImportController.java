@@ -192,6 +192,4 @@ public class ImportController {
 		response.put("created_at", receiptBody.getCreatedAt());
 		return ResponseEntity.ok(response);
 	}
-
-
 }

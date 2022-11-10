@@ -2,9 +2,12 @@ package s1mple.dlowji.ffms_refactor.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import s1mple.dlowji.ffms_refactor.entities.ImportReceipt;
 import s1mple.dlowji.ffms_refactor.entities.Item;
+import s1mple.dlowji.ffms_refactor.entities.ServiceReceipt;
 import s1mple.dlowji.ffms_refactor.entities.Services;
 import s1mple.dlowji.ffms_refactor.repositories.ItemRepository;
+import s1mple.dlowji.ffms_refactor.repositories.ServicesReceiptRepository;
 import s1mple.dlowji.ffms_refactor.repositories.ServicesRepository;
 import s1mple.dlowji.ffms_refactor.services.ItemService;
 
@@ -21,6 +24,9 @@ public class IItemServiceImpl implements ItemService {
 
     @Autowired
     private ServicesRepository servicesRepository;
+
+    @Autowired
+    private ServicesReceiptRepository servicesReceiptRepository;
 
     @Override
     public Item save(Item item) {
@@ -58,5 +64,24 @@ public class IItemServiceImpl implements ItemService {
             }
         }
         return 0;
+    }
+
+    @Override
+    public int getPurchasePriceByMonth(int month, int year) {
+        List<ServiceReceipt> serviceReceiptList = servicesReceiptRepository.findAll();
+
+        for (ServiceReceipt receipt: serviceReceiptList) {
+            if (receipt.getCreatedAt().getYear() != year || receipt.getCreatedAt().getMonthValue() != month) {
+                serviceReceiptList.remove(receipt);
+            }
+        }
+
+        int totalPrice = 0;
+
+        for (ServiceReceipt receipt:serviceReceiptList) {
+            totalPrice += receipt.getTotalPrice();
+        }
+
+        return totalPrice;
     }
 }

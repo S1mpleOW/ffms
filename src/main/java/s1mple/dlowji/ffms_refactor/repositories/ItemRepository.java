@@ -10,6 +10,9 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import s1mple.dlowji.ffms_refactor.entities.Item;
+import s1mple.dlowji.ffms_refactor.entities.ServiceReceipt;
+
+import java.util.List;
 
 
 @Repository

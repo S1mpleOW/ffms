@@ -14,4 +14,6 @@ public interface ItemService {
     Item findByName(String name);
 
     int findSellPrice(Long id);
+
+    int getPurchasePriceByMonth(int month, int year);
 }

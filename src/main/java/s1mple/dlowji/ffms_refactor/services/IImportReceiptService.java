@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface IImportReceiptService {
     List<ImportReceipt> getImportReceiptsByQuarter(int quarter, int year);
+
+    int getImportReceiptsByMonth(int month, int year);
 }

@@ -118,4 +118,23 @@ public class IBookedTicketServiceImpl implements IBookedTicketService {
 
 		return bookedTicketList;
 	}
+
+	@Override
+	public int getBookedPriceByMonth(int month, int year) {
+		List<BookedTicket> bookedTicketList = bookedTicketRepository.findAll();
+
+		for (BookedTicket receipt: bookedTicketList) {
+			if (receipt.getCreatedAt().getYear() != year || receipt.getCreatedAt().getMonthValue() != month) {
+				bookedTicketList.remove(receipt);
+			}
+		}
+
+		int totalPrice = 0;
+
+		for (BookedTicket receipt:bookedTicketList) {
+			totalPrice += receipt.getTotalPrice();
+		}
+
+		return totalPrice;
+	}
 }
