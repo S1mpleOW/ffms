@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import s1mple.dlowji.ffms_refactor.dto.request.ItemOrderForm;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
 import s1mple.dlowji.ffms_refactor.entities.*;
+import s1mple.dlowji.ffms_refactor.entities.enums.EquipmentStatus;
 import s1mple.dlowji.ffms_refactor.entities.enums.PaymentStatus;
 import s1mple.dlowji.ffms_refactor.repositories.EmployeeRepository;
 import s1mple.dlowji.ffms_refactor.repositories.ItemRepository;
@@ -90,6 +91,9 @@ public class ItemController {
 			}
 			totalPrice.set(totalPrice.get() + (int) (itemService.findSellPrice(itemBuy.getId()) * item.get(
 			"quantity")));
+			if (currentQuantity - quantityBuy == 0) {
+				itemBuy.setStatus(EquipmentStatus.SOLD_OUT);
+			}
 			itemBuy.setQuantity(currentQuantity - quantityBuy);
 			itemsBuy.put(itemBuy, quantityBuy);
 		}
