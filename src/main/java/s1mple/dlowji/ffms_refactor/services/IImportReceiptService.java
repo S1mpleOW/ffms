@@ -8,4 +8,5 @@ public interface IImportReceiptService {
     List<ImportReceipt> getImportReceiptsByQuarter(int quarter, int year);
 
     int getImportReceiptsByMonth(int month, int year);
+    int getImportReceiptsByDay(int day, int month, int year);
 }

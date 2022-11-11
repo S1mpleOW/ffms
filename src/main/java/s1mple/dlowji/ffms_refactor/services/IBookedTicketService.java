@@ -22,4 +22,6 @@ public interface IBookedTicketService {
 	List<BookedTicket> getBookedTicketByQuarter(int year, int quarter);
 
 	int getBookedPriceByMonth(int month, int year);
+
+	 int getBookedPriceByDay(int day, int month, int year);
 }

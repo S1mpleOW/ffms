@@ -16,4 +16,6 @@ public interface ItemService {
     int findSellPrice(Long id);
 
     int getPurchasePriceByMonth(int month, int year);
+
+    int getPurchasePriceByDay(int day, int month, int year);
 }

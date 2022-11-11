@@ -48,7 +48,7 @@ public class ItemController {
 	@Autowired
 	private ServicesReceiptRepository servicesReceiptRepository;
 
-	@PostMapping("/item/buy")
+	@PostMapping("/item/sell")
 	public ResponseEntity<?> buyItem(@Valid @RequestBody ItemOrderForm itemOrderForm) {
 		Customer customer = null;
 		if (itemOrderForm.getPhone() != null) {

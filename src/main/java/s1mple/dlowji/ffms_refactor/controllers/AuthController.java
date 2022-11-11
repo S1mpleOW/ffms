@@ -20,6 +20,7 @@ import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
 import s1mple.dlowji.ffms_refactor.entities.Account;
 import s1mple.dlowji.ffms_refactor.entities.Customer;
 import s1mple.dlowji.ffms_refactor.entities.Role;
+import s1mple.dlowji.ffms_refactor.entities.enums.PaymentStatus;
 import s1mple.dlowji.ffms_refactor.entities.enums.RoleName;
 import s1mple.dlowji.ffms_refactor.helper.JwtHelper;
 import s1mple.dlowji.ffms_refactor.security.userprincipal.UserPrincipal;
@@ -29,10 +30,7 @@ import s1mple.dlowji.ffms_refactor.services.impl.IRoleServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
@@ -118,6 +116,25 @@ public class AuthController {
 		System.out.println(roles);
 
 		return ResponseEntity.ok(ResponseJwt.builder().token(token).name(userPrincipal.getFullName()).roles(roles).type("Bearer").build());
+	}
+
+	@GetMapping("/profile/")
+	public ResponseEntity<?> profile() {
+
+		Authentication authentication =
+		SecurityContextHolder.getContext().getAuthentication();
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+		Optional<Account> account =
+		iAccountService.findAccountByUsername(userPrincipal.getUsername());
+		Account accountResponse = null;
+		if(account.isPresent() && !account.isEmpty()) {
+			accountResponse = account.get();
+		}
+
+		Map<String, Object> response = new HashMap<>();
+		response.put("status", HttpStatus.OK.value());
+		response.put("account", accountResponse);
+		return ResponseEntity.ok(response);
 	}
 
 }

@@ -47,4 +47,23 @@ public class IImportReceiptServiceImpl implements IImportReceiptService {
 
         return totalPrice;
     }
+
+    @Override
+    public int getImportReceiptsByDay(int day, int month, int year) {
+        List<ImportReceipt> importReceiptList = new ArrayList<>();
+
+        for (ImportReceipt receipt: importRepository.findAll()) {
+            if (receipt.getCreatedAt().getYear() == year && receipt.getCreatedAt().getMonthValue() == month && receipt.getCreatedAt().getDayOfMonth() == day) {
+                importReceiptList.add(receipt);
+            }
+        }
+
+        int totalPrice = 0;
+
+        for (ImportReceipt receipt:importReceiptList) {
+            totalPrice += receipt.getTotalPrice();
+        }
+
+        return totalPrice;
+    }
 }

@@ -64,10 +64,9 @@ public class ImportController {
 		int importPrice = item.getImportPrice();
 		int moreQuantity = orderMoreProductDTO.getQuantity();
 		item.setQuantity(moreQuantity + item.getQuantity());
-		if (item.getStatus().equals(EquipmentStatus.SOLD_OUT.toString())) {
+		if (item.getStatus().equals(EquipmentStatus.SOLD_OUT)) {
 			item.setStatus(EquipmentStatus.AVAILABLE);
 		}
-
 
 		Authentication authentication =
 		SecurityContextHolder.getContext().getAuthentication();

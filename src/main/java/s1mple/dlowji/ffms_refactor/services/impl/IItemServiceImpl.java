@@ -85,4 +85,23 @@ public class IItemServiceImpl implements ItemService {
 
         return totalPrice;
     }
+
+    @Override
+    public int getPurchasePriceByDay(int day, int month, int year) {
+        List<ServiceReceipt> serviceReceiptList = new ArrayList<>();
+
+        for (ServiceReceipt receipt: servicesReceiptRepository.findAll()) {
+            if (receipt.getCreatedAt().getYear() == year && receipt.getCreatedAt().getMonthValue() == month && receipt.getCreatedAt().getDayOfMonth() == day) {
+                serviceReceiptList.add(receipt);
+            }
+        }
+
+        int totalPrice = 0;
+
+        for (ServiceReceipt receipt:serviceReceiptList) {
+            totalPrice += receipt.getTotalPrice();
+        }
+
+        return totalPrice;
+    }
 }
