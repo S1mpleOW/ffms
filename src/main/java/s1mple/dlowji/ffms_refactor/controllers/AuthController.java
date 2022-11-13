@@ -118,9 +118,8 @@ public class AuthController {
 		return ResponseEntity.ok(ResponseJwt.builder().token(token).name(userPrincipal.getFullName()).roles(roles).type("Bearer").build());
 	}
 
-	@GetMapping("/profile/")
+	@GetMapping("/user-profile")
 	public ResponseEntity<?> profile() {
-
 		Authentication authentication =
 		SecurityContextHolder.getContext().getAuthentication();
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();

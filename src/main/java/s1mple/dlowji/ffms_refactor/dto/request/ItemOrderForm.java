@@ -14,7 +14,6 @@ import java.util.List;
 @Getter
 @Setter
 public class ItemOrderForm {
-	@Length(min = 10, max = 10 , message = "Phone number must be 10 characters")
 	private String phone;
 
 	@NotNull(message = "Items must not be null")
