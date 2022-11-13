@@ -1,5 +1,5 @@
 
-# [Java spring boot] This is the source code of server side code for the enterprise system development concept course.
+# [Java spring boot] This is the source code of server side for the enterprise system development concept course.
 
 ## How to run this project
     1. Install mysql database
