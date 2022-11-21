@@ -19,10 +19,12 @@ import s1mple.dlowji.ffms_refactor.dto.response.ResponseJwt;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
 import s1mple.dlowji.ffms_refactor.entities.Account;
 import s1mple.dlowji.ffms_refactor.entities.Customer;
+import s1mple.dlowji.ffms_refactor.entities.Employee;
 import s1mple.dlowji.ffms_refactor.entities.Role;
 import s1mple.dlowji.ffms_refactor.entities.enums.PaymentStatus;
 import s1mple.dlowji.ffms_refactor.entities.enums.RoleName;
 import s1mple.dlowji.ffms_refactor.helper.JwtHelper;
+import s1mple.dlowji.ffms_refactor.repositories.EmployeeRepository;
 import s1mple.dlowji.ffms_refactor.security.userprincipal.UserPrincipal;
 import s1mple.dlowji.ffms_refactor.services.IAccountService;
 import s1mple.dlowji.ffms_refactor.services.impl.ICustomerServiceImpl;
@@ -46,6 +48,9 @@ public class AuthController {
 	private ICustomerServiceImpl iCustomerService;
 
 	@Autowired
+	private EmployeeRepository employeeRepository;
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	@Autowired
@@ -59,7 +64,6 @@ public class AuthController {
 
 	@PostMapping("/register")
 	public ResponseEntity<?> register(@Valid @RequestBody SignUpForm signUpForm) {
-		System.out.println(signUpForm);
 		try {
 			if (iAccountService.existsByUsername(signUpForm.getUsername())) {
 				return new ResponseEntity<>(new ResponseMessage("The username is " +
@@ -107,15 +111,39 @@ public class AuthController {
 	public ResponseEntity<?> login(@Valid @RequestBody SignInForm signInForm) {
 		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInForm.getUsername(),
 		signInForm.getPassword()));
-		System.out.println(authentication);
 		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String token = jwtHelper.createToken(authentication);
+
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 		List<String> roles =
 		userPrincipal.getRoles().stream().map(role -> role.getAuthority()).collect(Collectors.toList());
-		System.out.println(roles);
 
-		return ResponseEntity.ok(ResponseJwt.builder().token(token).name(userPrincipal.getFullName()).roles(roles).type("Bearer").build());
+		if(roles.contains(RoleName.EMPLOYEE.getName()) && !roles.contains(RoleName.ADMIN.getName()) ) {
+			Employee employee =
+			employeeRepository.findEmployeeByAccount_Username(userPrincipal.getUsername());
+			if(employee.isDeleted()) {
+				Map<String, Object> response = new HashMap<>();
+				response.put("status", HttpStatus.UNAUTHORIZED.value());
+				response.put("message", "Account has been deleted. Please contact " +
+				"with " +
+				"administrator to resolve problem");
+				return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+			}
+		}
+
+		if(roles.contains(RoleName.USER.getName()) && !roles.contains(RoleName.ADMIN.getName())) {
+			Customer customer =
+			iCustomerService.findCustomerByUsername(userPrincipal.getUsername());
+			if(customer.isDeleted()) {
+				Map<String, Object> response = new HashMap<>();
+				response.put("status", HttpStatus.UNAUTHORIZED.value());
+				response.put("message", "Account has been deleted. Please contact with " +
+				"administrator to resolve problem");
+				return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+			}
+		}
+
+		String token = jwtHelper.createToken(authentication);
+		return ResponseEntity.ok(ResponseJwt.builder().token(token).name(userPrincipal.getFullName()).roles(roles).type("Bearer").status(HttpStatus.OK.value()).build());
 	}
 
 	@GetMapping("/user-profile")
@@ -135,5 +163,4 @@ public class AuthController {
 		response.put("account", accountResponse);
 		return ResponseEntity.ok(response);
 	}
-
 }

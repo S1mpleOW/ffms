@@ -11,4 +11,8 @@ import java.util.List;
 public interface ServicesReceiptRepository extends CrudRepository<ServiceReceipt,
 Long> {
     List<ServiceReceipt> findAll();
+
+    List<ServiceReceipt> findServiceReceiptsByUser_Id(Long employeeId);
+
+    List<ServiceReceipt> findServiceReceiptsByEmployee_Id(Long employeeId);
 }

@@ -9,4 +9,8 @@ import java.util.List;
 @Repository
 public interface BookedTicketRepository extends CrudRepository<BookedTicket, Long> {
     List<BookedTicket> findAll();
+
+    List<BookedTicket> findBookedTicketsByCustomer_Id(Long customerId);
+
+    List<BookedTicket> findBookedTicketsByEmployee_Id(Long employeeId);
 }

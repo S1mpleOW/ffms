@@ -15,4 +15,5 @@ public class ResponseJwt {
 	private String name;
 	private String type = "Bearer";
 	private List<String> roles;
+	private int status;
 }

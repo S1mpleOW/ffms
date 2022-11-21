@@ -13,8 +13,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Table(name = "service_receipt")
+@ToString
 public class ServiceReceipt extends AbstractEntity {
     @Column(name = "PAYMENT_STATUS")
     @Enumerated(EnumType.STRING)
@@ -36,4 +36,5 @@ public class ServiceReceipt extends AbstractEntity {
 
     @OneToMany(mappedBy = "serviceReceipt", fetch = FetchType.LAZY)
     private List<ServiceReceiptDetail> serviceReceiptDetails;
+
 }

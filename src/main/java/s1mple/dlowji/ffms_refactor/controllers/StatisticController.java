@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import s1mple.dlowji.ffms_refactor.repositories.EmployeeRepository;
 import s1mple.dlowji.ffms_refactor.services.IBookedTicketService;
+import s1mple.dlowji.ffms_refactor.services.IEmployeeServices;
 import s1mple.dlowji.ffms_refactor.services.IImportReceiptService;
 import s1mple.dlowji.ffms_refactor.services.ItemService;
 
@@ -30,12 +32,30 @@ public class StatisticController {
 	@Autowired
 	private ItemService itemService;
 
+	@Autowired
+	private IEmployeeServices iEmployeeServices;
+
 	public static int getNumberOfDaysInMonth(int year,int month)
 	{
 		// LocalDate object
 		LocalDate date = LocalDate.of(year, month, 1);
 		return date.lengthOfMonth();
 	}
+
+	@GetMapping("/total-employee-salary-each-month")
+	public ResponseEntity<?> getTotalSalaryEmployee() {
+		double totalPrice = iEmployeeServices.getTotalSalaryEmployeeEachMonth();
+		LocalDateTime now = LocalDateTime.now();
+		int currentYear = now.getYear();
+		int currentMonth = now.getMonthValue();
+		Map<String, Object> response = new HashMap<>();
+		response.put("status", HttpStatus.OK.value());
+		response.put("total_price", totalPrice);
+		response.put("year", currentYear);
+		response.put("month", currentMonth);
+		return ResponseEntity.ok(response);
+	}
+
 
 	@GetMapping("/import-price/{year}/{month}")
 	public ResponseEntity<?> getImportPriceByMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
@@ -78,8 +98,10 @@ public class StatisticController {
 
 	@GetMapping("/total-price/{year}/{month}")
 	public ResponseEntity<?> getTotalPriceByMonth(@PathVariable("year") int year, @PathVariable("month") int month) {
-		int totalPrice = bookedTicketService.getBookedPriceByMonth(month,
-		year) + itemService.getPurchasePriceByMonth(month, year) - importReceiptService.getImportReceiptsByMonth(month, year);
+		int totalPrice = (int) (bookedTicketService.getBookedPriceByMonth(month, year)
+		+ itemService.getPurchasePriceByMonth(month, year)
+		- importReceiptService.getImportReceiptsByMonth(month, year)
+		- iEmployeeServices.getTotalSalaryEmployeeEachMonth());
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("status", HttpStatus.OK.value());
@@ -94,8 +116,10 @@ public class StatisticController {
 	public ResponseEntity<?> getTotalRevenueByYear(@PathVariable("year") int year) {
 		List<Long> totalPrice = new ArrayList<>();
 		for (int month = 1; month <= 12; month++) {
-			int totalPriceInMonth = bookedTicketService.getBookedPriceByMonth(month,
-			year) + itemService.getPurchasePriceByMonth(month, year) - importReceiptService.getImportReceiptsByMonth(month, year);
+			int totalPriceInMonth = (int) (bookedTicketService.getBookedPriceByMonth(month, year)
+			+ itemService.getPurchasePriceByMonth(month, year)
+			- importReceiptService.getImportReceiptsByMonth(month, year)
+			- iEmployeeServices.getTotalSalaryEmployeeEachMonth());
 			totalPrice.add((long) totalPriceInMonth);
 		}
 		Map<String, Object> response = new HashMap<>();
@@ -216,7 +240,6 @@ public class StatisticController {
 		LocalDateTime now = LocalDateTime.now();
 		int year = now.getYear();
 		int numDays = getNumberOfDaysInMonth(year, month);
-		System.out.println(numDays);
 		List<Long> totalPrice = new ArrayList<>();
 		for (int day = 1; day <= numDays; day++) {
 			int totalPriceInMonth = itemService.getPurchasePriceByDay(day, month, year);

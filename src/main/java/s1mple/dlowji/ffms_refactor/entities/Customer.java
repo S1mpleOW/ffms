@@ -28,4 +28,7 @@ public class Customer extends AbstractEntity {
 	@UpdateTimestamp
 	@Column(name = "UPDATED_AT")
 	private ZonedDateTime updatedAt;
+
+	@Column(name = "IS_DELETED", columnDefinition = "BOOLEAN DEFAULT FALSE")
+	private boolean isDeleted;
 }

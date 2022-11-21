@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface ImportRepository extends JpaRepository<ImportReceipt, Long> {
     List<ImportReceipt> findAll();
+
+    List<ImportReceipt> findImportReceiptsByEmployee_Id(Long employeeId);
 }

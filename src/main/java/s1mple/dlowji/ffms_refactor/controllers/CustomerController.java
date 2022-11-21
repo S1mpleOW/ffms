@@ -1,6 +1,7 @@
 package s1mple.dlowji.ffms_refactor.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -32,7 +33,7 @@ public class CustomerController {
 
 	@GetMapping("/customers")
 	@ResponseBody
-	public ResponseEntity<?> getCustomers() {
+	public ResponseEntity<?> getCustomers(Pageable pageable) {
 		Authentication authentication =
 		SecurityContextHolder.getContext().getAuthentication();
 		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
@@ -42,7 +43,7 @@ public class CustomerController {
 		if (authorities.contains(RoleName.ADMIN.getName()) || authorities.contains(RoleName.EMPLOYEE.getName())) {
 			Map<String, Object> response = new HashMap<>();
 			response.put("status", HttpStatus.OK.value());
-			response.put("data", customerService.findAll());
+			response.put("data", customerService.findAll(pageable));
 			return ResponseEntity.ok(response);
 		}
 

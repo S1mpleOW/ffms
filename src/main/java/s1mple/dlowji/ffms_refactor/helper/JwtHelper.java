@@ -45,7 +45,6 @@ public class JwtHelper {
 
 	public boolean validateToken(String token) {
 		try {
-			System.out.println(token);
 			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
 			return true;
 		} catch (ExpiredJwtException expiredJwtException) {

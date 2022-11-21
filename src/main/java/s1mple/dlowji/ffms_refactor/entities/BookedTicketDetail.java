@@ -43,4 +43,6 @@ public class BookedTicketDetail {
     @CreationTimestamp
     private ZonedDateTime orderDate;
 
+    @Column(name = "IS_CANCELED", columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean isCanceled;
 }

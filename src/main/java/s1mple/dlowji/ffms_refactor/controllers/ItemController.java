@@ -105,6 +105,8 @@ public class ItemController {
 		.totalPrice(totalPrice.get())
 		.build();
 
+		servicesReceiptRepository.save(serviceReceipt);
+
 		itemsBuy.forEach((itemBuy, quantityBuy) -> {
 			ServiceReceiptDetail serviceReceiptDetail = ServiceReceiptDetail.builder()
 			.item(itemBuy)
@@ -116,9 +118,6 @@ public class ItemController {
 			serviceReceiptDetailRepository.save(serviceReceiptDetail);
 			itemService.save(itemBuy);
 		});
-
-		servicesReceiptRepository.save(serviceReceipt);
-
 
 		Map<String, Object> response = new HashMap<>();
 		response.put("status", HttpStatus.OK.value());

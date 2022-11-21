@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface ICustomerService {
-	Page<Customer> findAll();
+	Page<Customer> findAll(Pageable pageable);
 
 	Customer save(Customer customer);
 
@@ -23,4 +23,7 @@ public interface ICustomerService {
 	boolean existsByPhoneNumber(String phone);
 
 	Optional<Customer> findCustomerByPhone(String phone);
+
+	Customer findCustomerByUsername(String username);
+
 }

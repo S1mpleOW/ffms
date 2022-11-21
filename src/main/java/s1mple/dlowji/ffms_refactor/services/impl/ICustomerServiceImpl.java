@@ -19,9 +19,8 @@ public class ICustomerServiceImpl implements ICustomerService {
 	@Value("${spring.data.rest.default-page-size}")
 	private int pageSize;
 	@Override
-	public Page<Customer> findAll() {
-		Pageable pageable = PageRequest.of(0, pageSize);
-		return customerRepository.findAll(pageable);
+	public Page<Customer> findAll(Pageable pageable) {
+		return customerRepository.findAllByDeletedIsFalse(pageable);
 	}
 
 	@Override
@@ -41,11 +40,13 @@ public class ICustomerServiceImpl implements ICustomerService {
 
 	@Override
 	public Customer deleteById(Long id) {
-		Optional<Customer> customer = customerRepository.findById(id);
-		if(customer.isPresent() && !customer.isEmpty()) {
-			customerRepository.deleteById(id);
+		Optional<Customer> optionalCustomer = customerRepository.findById(id);
+		if(optionalCustomer.isPresent() && !optionalCustomer.isEmpty()) {
+			Customer customer = optionalCustomer.get();
+			customer.setDeleted(true);
+			customerRepository.save(customer);
 		}
-		return customer.get();
+		return optionalCustomer.get();
 	}
 
 	@Override
@@ -62,5 +63,16 @@ public class ICustomerServiceImpl implements ICustomerService {
 	public Optional<Customer> findCustomerByPhone(String phone) {
 
 		return customerRepository.findCustomerByAccount_Phone(phone);
+	}
+
+	@Override
+	public Customer findCustomerByUsername(String username) {
+		Optional<Customer> optionalCustomer =
+		customerRepository.findCustomerByAccount_Username(username);
+		if(optionalCustomer.isPresent() && !optionalCustomer.isEmpty()) {
+			Customer customer = optionalCustomer.get();
+			return customer;
+		}
+		return null;
 	}
 }

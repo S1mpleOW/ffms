@@ -13,7 +13,6 @@ import java.time.ZonedDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
 @Table(name = "service_receipt_detail")
 public class ServiceReceiptDetail {
     @EmbeddedId

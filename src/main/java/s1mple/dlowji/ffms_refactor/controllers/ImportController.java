@@ -55,7 +55,6 @@ public class ImportController {
 
 	@PostMapping("/item/order-more")
 	public ResponseEntity<?> orderMore(@Valid @RequestBody OrderMoreProductDTO orderMoreProductDTO) {
-		System.out.println(orderMoreProductDTO);
 		if (!itemService.existsById((orderMoreProductDTO.getItemID()))) {
 			return new ResponseEntity<>(new ResponseMessage("The supplier is not " +
 			"existed", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);
@@ -115,8 +114,6 @@ public class ImportController {
 
 	@PostMapping("/item/order")
 	public ResponseEntity<?> importItems(@Valid @RequestBody ImportItemsForm importItemsForm) {
-		System.out.println(importItemsForm);
-
 		if (!supplierRepository.existsById((importItemsForm.getSupplier_id()))) {
 			return new ResponseEntity<>(new ResponseMessage("The supplier is not " +
 			"existed", HttpStatus.BAD_REQUEST.value()), HttpStatus.BAD_REQUEST);

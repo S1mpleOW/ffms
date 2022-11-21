@@ -3,6 +3,8 @@ package s1mple.dlowji.ffms_refactor.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import s1mple.dlowji.ffms_refactor.dto.request.AddEmployeeForm;
 import s1mple.dlowji.ffms_refactor.dto.response.ResponseMessage;
@@ -10,16 +12,20 @@ import s1mple.dlowji.ffms_refactor.entities.*;
 import s1mple.dlowji.ffms_refactor.entities.enums.RoleName;
 import s1mple.dlowji.ffms_refactor.repositories.EmployeeRepository;
 import s1mple.dlowji.ffms_refactor.repositories.FieldGroupRepository;
+import s1mple.dlowji.ffms_refactor.security.userprincipal.UserPrincipal;
 import s1mple.dlowji.ffms_refactor.services.IAccountService;
+import s1mple.dlowji.ffms_refactor.services.IEmployeeServices;
 import s1mple.dlowji.ffms_refactor.services.impl.IRoleServiceImpl;
 
 import javax.validation.Valid;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/employees")
+@RequestMapping("/api")
 public class EmployeeController {
 	@Autowired
 	private IAccountService iAccountService;
@@ -33,7 +39,10 @@ public class EmployeeController {
 	@Autowired
 	private FieldGroupRepository fieldGroupRepository;
 
-	@PostMapping("/register")
+	@Autowired
+	private IEmployeeServices iEmployeeServices;
+
+	@PostMapping("/employees/register")
 	public ResponseEntity<?> register(@Valid @RequestBody AddEmployeeForm signUpForm) {
 		try {
 			if (iAccountService.existsByUsername(signUpForm.getUsername())) {
@@ -108,5 +117,29 @@ public class EmployeeController {
 			HttpStatus.INTERNAL_SERVER_ERROR.value()),
 			HttpStatus.INTERNAL_SERVER_ERROR);
 		}
+	}
+
+	@DeleteMapping("/employees/{id}")
+	public ResponseEntity<?> deleteCustomer(@PathVariable("id") Long id) {
+		Authentication authentication =
+		SecurityContextHolder.getContext().getAuthentication();
+		UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+		List<String> authorities =
+		userPrincipal.getAuthorities().stream().map(role -> role.getAuthority()).collect(Collectors.toList());
+
+		if (!authorities.contains(RoleName.ADMIN.getName())) {
+			return ResponseEntity.badRequest().body(new ResponseMessage("You don't " +
+			"have permission to access", HttpStatus.BAD_REQUEST.value()));
+		}
+
+		Employee employee = iEmployeeServices.findEmployeeById(id);
+		if (employee == null) {
+			return ResponseEntity.badRequest().body(new ResponseMessage("Can't find" +
+			" the employee", HttpStatus.BAD_REQUEST.value()));
+		}
+		iEmployeeServices.deleteById(id);
+		return ResponseEntity.ok().body(new ResponseMessage("Delete successfully"
+		, HttpStatus.OK.value()));
 	}
 }

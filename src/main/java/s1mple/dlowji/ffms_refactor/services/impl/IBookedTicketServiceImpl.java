@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.temporal.IsoFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class IBookedTicketServiceImpl implements IBookedTicketService {
@@ -98,11 +99,10 @@ public class IBookedTicketServiceImpl implements IBookedTicketService {
 		List<BookedTicketDetail> bookedTicketDetailList = new ArrayList<>();
 
 		for (BookedTicketDetail btd : bookedTicketDetailRepository.findAll()) {
-			if (btd.getFootballField().getId() == field_id && btd.getStartTime().isAfter(firstDay) && btd.getStartTime().isBefore(lastDay)) {
+			if (btd.getFootballField().getId() == field_id && btd.getStartTime().isAfter(firstDay) && btd.getStartTime().isBefore(lastDay) && !btd.isCanceled()) {
 				bookedTicketDetailList.add(btd);
 			}
 		}
-
 		return bookedTicketDetailList;
 	}
 
@@ -132,7 +132,13 @@ public class IBookedTicketServiceImpl implements IBookedTicketService {
 		int totalPrice = 0;
 
 		for (BookedTicket receipt:bookedTicketList) {
-			totalPrice += receipt.getTotalPrice();
+			boolean isNotCancel =
+			receipt.getBookedTicketDetails()
+			.stream().filter(bookedTicketDetail -> bookedTicketDetail.isCanceled())
+			.collect(Collectors.toList()).isEmpty();
+			if(isNotCancel) {
+				totalPrice += receipt.getTotalPrice();
+			}
 		}
 
 		return totalPrice;
